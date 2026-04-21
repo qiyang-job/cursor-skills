@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design System Preview - {{SITE_NAME}}</title>
+    <style>
+        /* Base Reset */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* CSS Variables - Will be populated from extracted design tokens */
+        :root {
+            /* Colors */
+            --color-primary: {{PRIMARY_COLOR}};
+            --color-text: {{TEXT_COLOR}};
+            --color-bg: {{BG_COLOR}};
+            --color-surface: {{SURFACE_COLOR}};
+            --color-border: {{BORDER_COLOR}};
+            
+            /* Typography */
+            --font-primary: {{FONT_FAMILY}};
+            --font-mono: {{MONO_FONT}};
+            
+            /* Spacing */
+            --space-xs: {{XS}};
+            --space-sm: {{SM}};
+            --space-md: {{MD}};
+            --space-lg: {{LG}};
+            --space-xl: {{XL}};
+            
+            /* Radius */
+            --radius-sm: {{RADIUS_SM}};
+            --radius-md: {{RADIUS_MD}};
+            --radius-lg: {{RADIUS_LG}};
+            
+            /* Shadows */
+            --shadow-sm: {{SHADOW_SM}};
+            --shadow-md: {{SHADOW_MD}};
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border);
+            padding: 1rem 2rem;
+            z-index: 100;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav a {
+            color: var(--color-text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        nav a:hover {
+            color: var(--color-primary);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        section {
+            margin-bottom: 4rem;
+        }
+
+        h1, h2, h3 {
+            margin-bottom: 1.5rem;
+        }
+
+        /* Overview Section */
+        .overview {
+            text-align: center;
+            padding: 4rem 0;
+            border-bottom: 2px solid var(--color-border);
+        }
+
+        .overview h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+
+        .overview p {
+            font-size: 1.25rem;
+            color: var(--color-text);
+            opacity: 0.7;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Color Section */
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .color-card {
+            background: var(--color-surface);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            border: 1px solid var(--color-border);
+        }
+
+        .color-swatch {
+            height: 80px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .color-info {
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+        }
+
+        .color-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .color-value {
+            color: var(--color-text);
+            opacity: 0.6;
+        }
+
+        /* Typography Section */
+        .type-scale {
+            margin-top: 1.5rem;
+        }
+
+        .type-row {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 2rem;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--color-border);
+            align-items: baseline;
+        }
+
+        .type-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--color-text);
+            opacity: 0.5;
+            text-transform: uppercase;
+        }
+
+        /* Components Section */
+        .component-demo {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-top: 1.5rem;
+            border: 1px solid var(--color-border);
+        }
+
+        .component-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .component-row:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        /* Demo Button Styles - Override with extracted tokens */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+        }
+
+        /* Demo Card */
+        .demo-card {
+            background: white;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            max-width: 300px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .demo-card h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .demo-card p {
+            font-size: 0.875rem;
+            opacity: 0.7;
+        }
+
+        /* Spacing Section */
+        .spacing-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .spacing-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .spacing-visual {
+            background: var(--color-primary);
+            border-radius: 2px;
+        }
+
+        .spacing-label {
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            min-width: 80px;
+        }
+
+        /* Markdown Section */
+        .markdown-container {
+            background: #f8f9fa;
+            border-radius: var(--radius-md);
+            padding: 2rem;
+            margin-top: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .markdown-container pre {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .overview h1 {
+                font-size: 2rem;
+            }
+            
+            .type-row {
+                grid-template-columns: 80px 1fr;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#colors">Colors</a></li>
+            <li><a href="#typography">Typography</a></li>
+            <li><a href="#spacing">Spacing</a></li>
+            <li><a href="#components">Components</a></li>
+            <li><a href="#markdown">Markdown</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- Overview Section -->
+        <section id="overview" class="overview">
+            <h1>{{SITE_NAME}}</h1>
+            <p>{{THEME_DESCRIPTION}}</p>
+        </section>
+
+        <!-- Colors Section -->
+        <section id="colors">
+            <h2>Color Palette</h2>
+            <div class="color-grid">
+                <!-- Color swatches will be inserted here -->
+                {{COLOR_SWATCHES}}
+            </div>
+        </section>
+
+        <!-- Typography Section -->
+        <section id="typography">
+            <h2>Typography Scale</h2>
+            <div class="type-scale">
+                {{TYPE_SCALE}}
+            </div>
+        </section>
+
+        <!-- Spacing Section -->
+        <section id="spacing">
+            <h2>Spacing System</h2>
+            <div class="spacing-stack">
+                {{SPACING_VISUAL}}
+            </div>
+        </section>
+
+        <!-- Components Section -->
+        <section id="components">
+            <h2>Components</h2>
+            
+            <h3>Buttons</h3>
+            <div class="component-demo">
+                <div class="component-row">
+                    <button class="btn btn-primary">Primary Button</button>
+                    <button class="btn btn-secondary">Secondary Button</button>
+                </div>
+            </div>
+
+            <h3>Cards</h3>
+            <div class="component-demo">
+                <div class="component-row">
+                    <div class="demo-card">
+                        <h4>Card Title</h4>
+                        <p>This is a sample card component demonstrating the extracted design.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Raw Markdown Section -->
+        <section id="markdown">
+            <h2>Raw Markdown Source</h2>
+            <div class="markdown-container">
+                <pre>{{MARKDOWN_SOURCE}}</pre>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Smooth scroll for navigation
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
