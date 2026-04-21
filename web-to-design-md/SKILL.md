@@ -1,30 +1,257 @@
 ---
 name: web-to-design-md
-description: Extract design systems from websites and convert them into structured DESIGN.md documents with companion HTML preview. Use when given website URLs and asked to analyze design, extract style guides, reverse-engineer UI, create design documentation, or capture visual language for implementation.
+description: Extract complete design systems from live websites using agent-browser to capture rendered styles, CSS variables, responsive behavior, and animations. Converts websites into structured DESIGN.md documents with companion HTML preview. Use when given website URLs and asked to analyze design, extract style guides, reverse-engineer UI with high fidelity, create design documentation, or capture visual language including colors, typography, spacing, structure, quality, and motion.
 ---
 
-# Website to DESIGN.md
+# Website to DESIGN.md — High Fidelity Design Extraction
 
-Convert any website into a structured design system document (DESIGN.md) with a visual HTML preview.
+Extract complete design systems from live websites, capturing **形色字构质动** (Color, Form, Typography, Structure, Quality, Motion) with maximum fidelity.
+
+## Core Extraction Goals
+
+| 维度 | 中文 | 提取内容 |
+|------|------|----------|
+| **Color** | 色 | 完整色彩系统（主色、辅助色、中性色、语义色、CSS变量） |
+| **Form** | 形 | 形状语言（圆角、阴影、边框、层级） |
+| **Typography** | 字 | 字体系统（字体族、字号层级、字重、行高、间距） |
+| **Structure** | 构 | 布局结构（网格、间距系统、响应式断点） |
+| **Quality** | 质 | 质感（纹理、渐变、透明度、材质感） |
+| **Motion** | 动 | 动效系统（过渡、动画、交互反馈、时间函数） |
 
 ## When to Use
 
-- User provides website URL(s) and asks to "extract design", "analyze website", "create design.md", or "reverse engineer UI"
-- User wants to understand a site's visual language, color system, typography, or components
-- User needs design documentation for rebuilding or referencing a site's style
-- User mentions "design system", "style guide", "UI kit", or "design tokens" in context of a website
+- "提取这个网站的设计" / "分析这个网页的样式"
+- "创建 design.md" / "生成设计文档"
+- "逆向这个 UI" / "复制这个网站的风格"
+- 需要高保真还原，不只是大致风格
 
-## Quick Start Workflow
+## Tool Priority
+
+### 1. Primary: `agent-browser` (推荐)
+
+**Capabilities:**
+- ✅ 执行 JavaScript 获取实际渲染样式
+- ✅ 提取 CSS 变量和计算样式
+- ✅ 测试响应式断点（模拟不同设备）
+- ✅ 捕捉交互状态（hover、active、focus）
+- ✅ 记录动画 timing 和 easing
+- ✅ 滚动触发动画分析
+
+**Usage:**
+```
+agent-browser open [URL]
+agent-browser eval "document.documentElement.outerHTML"
+agent-browser eval "getComputedStyle(element)"
+```
+
+### 2. Fallback: `WebFetch`
+
+当 `agent-browser` 不可用时，使用 `WebFetch` 获取静态 HTML 和 CSS，但会丢失：
+- JavaScript 渲染的动态内容
+- CSS 变量实际值
+- 交互状态样式
+- 响应式行为
+
+## Extraction Workflow
+
+### Phase 1: Browser Setup & Page Load
 
 ```
-1. Identify target URL(s) from user input
-2. Fetch and analyze the website content
-3. Extract design tokens (colors, typography, spacing)
-4. Document components and patterns
-5. Write DESIGN.md
-6. Generate HTML preview companion
-7. Deliver both files to user
+1. 检查 agent-browser 可用性
+2. 打开目标 URL
+3. 等待页面完全加载（包括 JS 渲染）
+4. 滚动到页面底部触发所有懒加载内容
+5. 截图保存页面全貌（可选）
 ```
+
+### Phase 2: Core Design Token Extraction
+
+执行 JavaScript 提取：**色**
+```javascript
+// 颜色提取
+const colors = new Set();
+document.querySelectorAll('*').forEach(el => {
+  const styles = getComputedStyle(el);
+  colors.add(styles.color);
+  colors.add(styles.backgroundColor);
+  colors.add(styles.borderColor);
+});
+// 提取 CSS 变量中的颜色
+const cssVars = getComputedStyle(document.documentElement);
+for (let prop of cssVars) {
+  if (prop.startsWith('--color') || prop.startsWith('--bg')) {
+    colors.add(cssVars.getPropertyValue(prop));
+  }
+}
+```
+
+执行 JavaScript 提取：**字**
+```javascript
+// 字体系统提取
+const fonts = new Map();
+document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, button, a').forEach(el => {
+  const styles = getComputedStyle(el);
+  const key = `${styles.fontFamily}|${styles.fontSize}|${styles.fontWeight}`;
+  fonts.set(key, {
+    family: styles.fontFamily,
+    size: styles.fontSize,
+    weight: styles.fontWeight,
+    lineHeight: styles.lineHeight,
+    letterSpacing: styles.letterSpacing
+  });
+});
+```
+
+执行 JavaScript 提取：**构**（间距）
+```javascript
+// 间距系统分析
+const spacings = new Set();
+document.querySelectorAll('*').forEach(el => {
+  const styles = getComputedStyle(el);
+  spacings.add(styles.padding);
+  spacings.add(styles.margin);
+  spacings.add(styles.gap);
+});
+// 提取 CSS 变量中的间距
+for (let prop of cssVars) {
+  if (prop.startsWith('--space') || prop.startsWith('--gap')) {
+    spacings.add(cssVars.getPropertyValue(prop));
+  }
+}
+```
+
+### Phase 3: Component & Interactive State Extraction
+
+提取 **形** 和 **质**：
+```javascript
+// 提取圆角、阴影、边框
+const components = document.querySelectorAll('button, .card, input, .btn');
+components.forEach(el => {
+  const styles = getComputedStyle(el);
+  console.log({
+    borderRadius: styles.borderRadius,
+    boxShadow: styles.boxShadow,
+    border: styles.border,
+    background: styles.background
+  });
+});
+```
+
+捕捉 **动**：
+```javascript
+// 动画和过渡提取
+const animatedElements = document.querySelectorAll('*');
+animatedElements.forEach(el => {
+  const styles = getComputedStyle(el);
+  if (styles.animation !== 'none 0s ease 0s 1 normal none running' ||
+      styles.transition !== 'all 0s ease 0s') {
+    console.log({
+      element: el.tagName,
+      animation: styles.animation,
+      transition: styles.transition
+    });
+  }
+});
+```
+
+### Phase 4: Responsive Breakpoint Testing
+
+```
+1. 模拟桌面端 (1920x1080)
+2. 模拟平板端 (768x1024)
+3. 模拟移动端 (375x812)
+4. 记录各断点下的布局变化
+5. 提取响应式 CSS 规则
+```
+
+### Phase 5: Interaction State Testing
+
+```
+1. 模拟 hover 状态并提取样式变化
+2. 模拟 active/pressed 状态
+3. 模拟 focus 状态（可见时）
+4. 记录 state 之间的 transition
+```
+
+### Phase 6: Documentation & Preview Generation
+
+1. 整合所有提取数据
+2. 按 **形色字构质动** 分类整理
+3. 生成 DESIGN.md
+4. 创建可视化 HTML 预览
+
+## Quality Checklist
+
+提取完成后验证：
+
+### 色 (Color) ✅
+- [ ] 主品牌色提取准确
+- [ ] 中性色阶完整（至少 8 级）
+- [ ] 语义色（成功、错误、警告）识别
+- [ ] CSS 变量中的颜色值提取
+- [ ] 渐变定义记录
+
+### 形 (Form) ✅
+- [ ] 圆角系统（sm、md、lg、xl）
+- [ ] 阴影层级（z-index 对应 shadow）
+- [ ] 边框样式（宽度、颜色、虚实）
+- [ ] 形状语言（sharp vs rounded）
+
+### 字 (Typography) ✅
+- [ ] 字体族完整（包括 fallback）
+- [ ] 字号层级（至少 6 级）
+- [ ] 字重使用（400、500、600、700）
+- [ ] 行高比例
+- [ ] 字间距（letter-spacing）
+
+### 构 (Structure) ✅
+- [ ] 间距系统（base unit + scale）
+- [ ] 网格定义（grid/flex）
+- [ ] 容器宽度（max-width）
+- [ ] 响应式断点（sm、md、lg、xl）
+- [ ] 边距规范
+
+### 质 (Quality) ✅
+- [ ] 纹理/噪点（如有）
+- [ ] 渐变模式
+- [ ] 透明度使用
+- [ ] 毛玻璃效果（backdrop-filter）
+- [ ] 材质感（Material、Neumorphism 等）
+
+### 动 (Motion) ✅
+- [ ] 过渡时长（hover、focus 等）
+- [ ] 缓动函数（easing）
+- [ ] 动画关键帧
+- [ ] 滚动触发动画
+- [ ] 微交互（micro-interactions）
+
+## Handling Extraction Gaps
+
+如果某些值无法自动提取：
+
+1. **标注为 [推断]**：基于可见模式合理推测
+2. **请求用户补充**："这个 hover 色无法确定，你观察到的是什么？"
+3. **使用行业标准**：参考 Tailwind、Material 等系统的默认值
+4. **标注不确定性**：在文档中注明哪些是推断的
+
+## Tool Installation (如果 agent-browser 不可用)
+
+```bash
+# 安装 agent-browser
+curl -fsSL https://install.agent-browser.dev | sh
+
+# 验证安装
+agent-browser --version
+```
+
+## Output Contract
+
+必须生成：
+1. **DESIGN.md** — 完整设计系统文档
+2. **DESIGN-preview.html** — 可视化设计板
+
+DESIGN.md 必须包含 **形色字构质动** 六大章节。
+
 
 ## Extraction Process
 
