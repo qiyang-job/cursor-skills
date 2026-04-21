@@ -9,7 +9,8 @@
 | **premium-ui-experience** | 高端 UI/UX 设计质量控制 | 确保 AI 输出精致、专业的用户界面 |
 | **project-context-keeper** | 项目上下文管理 | 管理长对话中的项目记忆和上下文 |
 | **token-context-economics** | Token 经济学 | 优化上下文使用效率，减少 Token 消耗 |
-| **vibe-coding-kickoff** | Vibe Coding 启动 | 新项目启动时的最佳实践和检查清单 |
+| **vibe-coding-kickoff** | Vibe Coding 项目启动 | 新项目启动的最佳实践和检查清单 |
+| **vibe-flow-state** | Vibe 心流保护 | 保持编码动量，防止过度分析打断 flow |
 | **web-to-design-md** | 网站设计提取 | 将网站转换为结构化设计文档 |
 
 ## 🚀 安装方法
@@ -65,7 +66,14 @@ cp -r /path/to/cursor-skills/web-to-design-md .cursor/skills/
 - 开发前置模板
 - 收口决策框架
 
-### 5. web-to-design-md
+### 5. vibe-flow-state
+保持 Vibe Coding 心流状态：
+- 保护编码动量不被打断
+- 防止过度分析和过早优化
+- 批量处理小问题
+- 保持"构建模式"而非"审查模式"
+
+### 6. web-to-design-md
 网站设计分析和提取：
 - 色彩系统提取
 - 字体层级分析
