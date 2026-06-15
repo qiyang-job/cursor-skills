@@ -1,3 +1,8 @@
+---
+name: image-to-web-layering
+description: Convert complex visual webpage images, AI-generated web mockups, editorial layouts, collage posters, and experimental portfolio screenshots into maintainable responsive HTML/CSS/JS by separating image assets, real HTML content, interaction states, and responsive recomposition plans. Use when turning a screenshot or generated webpage image into a coded webpage.
+---
+
 # Image to Web Layering Skill
 
 ## Purpose
