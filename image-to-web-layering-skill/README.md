@@ -25,14 +25,16 @@ Before writing code, this skill asks the agent to output:
 
 1. Page structure
 2. Layer map
-3. Asset extraction list
-4. Core HTML content list
-5. DOM plan
-6. CSS layering strategy
-7. Interaction state plan
-8. Responsive recomposition plan
-9. Development instructions
-10. QA checklist
+3. Canvas model
+4. Typography map
+5. Asset extraction list
+6. Core HTML content list
+7. DOM plan
+8. CSS layering strategy
+9. Interaction state plan
+10. Responsive recomposition plan
+11. Development instructions
+12. QA checklist
 
 ## Basic usage prompt
 
@@ -47,19 +49,22 @@ Convert this image into a maintainable responsive webpage.
 Before writing code, first output:
 1. Page structure
 2. Layer map
-3. Asset extraction list
-4. Core HTML content list
-5. DOM plan
-6. CSS layering strategy
-7. Interaction state plan
-8. Responsive recomposition plan
-9. QA checklist
+3. Canvas model
+4. Typography map
+5. Asset extraction list
+6. Core HTML content list
+7. DOM plan
+8. CSS layering strategy
+9. Interaction state plan
+10. Responsive recomposition plan
+11. QA checklist
 
 Principle:
 Complex visuals become image assets.
 Core information becomes real HTML.
 Interaction states become structured UI states.
 Responsive layouts are recomposed, not blindly scaled.
+Canvas behavior and typography are first-class fidelity targets.
 ```
 
 ## Implementation prompt
@@ -83,10 +88,11 @@ Requirements:
 ```text
 1. Generate or collect the webpage image.
 2. Run this skill to produce a layering report.
-3. Prepare assets according to the asset extraction list.
-4. Put assets into the suggested folder structure.
-5. Ask the coding agent to implement the page from the report.
-6. Validate using validation.md.
+3. Prepare assets according to the asset extraction list, using crop, mask, cutout, cleanup/inpaint, upscale, vector recreate, or regeneration as needed.
+4. Review assets with a contact sheet or equivalent visual check.
+5. Put assets into the suggested folder structure.
+6. Ask the coding agent to implement the page from the report.
+7. Validate using validation.md.
 ```
 
 ## Quality target
@@ -96,3 +102,6 @@ Requirements:
 - Mobile: 60% visual language fidelity + 100% content order and usability
 - Core text: always real HTML
 - Interaction states: structured, not baked into static images
+- Canvas model: centered or full-bleed behavior preserved
+- Typography: hero/display categories matched with close font stacks
+- Assets: clean extraction without unwanted baked-in UI text

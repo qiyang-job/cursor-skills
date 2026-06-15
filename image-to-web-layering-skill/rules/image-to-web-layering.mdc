@@ -19,8 +19,15 @@ When converting an image-based webpage mockup into code:
 - Use structured CSS/JS states for hover, active, selected, expanded, and mobile behavior.
 - Do not flatten the whole design into one image.
 - Do not attempt to redraw complex collage, tape, paper, handwriting, or torn edges in CSS.
+- Detect whether the source uses a centered max-width canvas, full-bleed layout, hybrid layout, or poster-like fixed composition before coding.
+- Match typography categories intentionally, especially hero/display type; do not use arbitrary default fonts when a closer stack is available.
+- Use rect crop, masked crop, subject cutout, cleanup/inpaint, upscale, vector/CSS recreate, or regeneration according to asset type.
+- Do not leave unwanted UI text, metadata, filters, or neighboring sections baked into media assets.
+- Keep text inside media only when it belongs to the photographed object, screen, signage, package, or artwork.
+- Review extracted assets with a contact sheet or equivalent visual check when multiple assets are used.
 - Preserve the visual language, but recompose layout for responsive screens.
 - Desktop may preserve collage complexity.
 - Mobile must prioritize reading order and usability.
 - Decorative images should use alt="" and aria-hidden="true".
 - Define a z-index system before implementing absolute-positioned collage elements.
+- Verify no horizontal overflow at 1440px, 1024px, 768px, and 390px when possible.
