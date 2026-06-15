@@ -1,0 +1,26 @@
+---
+description: Use when converting complex visual webpage images into responsive HTML/CSS/JS.
+globs:
+  - "**/*.html"
+  - "**/*.css"
+  - "**/*.js"
+  - "**/*.md"
+alwaysApply: false
+---
+
+# Complex Visual Image to Web Rule
+
+When converting an image-based webpage mockup into code:
+
+- Separate visual elements into Background, Grid, Media, Content, Decoration, and Interaction layers.
+- Use real HTML for all readable and editable content.
+- Export complex handmade visuals as assets.
+- Use CSS for grid lines, spacing, section rules, and responsive layout.
+- Use structured CSS/JS states for hover, active, selected, expanded, and mobile behavior.
+- Do not flatten the whole design into one image.
+- Do not attempt to redraw complex collage, tape, paper, handwriting, or torn edges in CSS.
+- Preserve the visual language, but recompose layout for responsive screens.
+- Desktop may preserve collage complexity.
+- Mobile must prioritize reading order and usability.
+- Decorative images should use alt="" and aria-hidden="true".
+- Define a z-index system before implementing absolute-positioned collage elements.
