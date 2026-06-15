@@ -192,6 +192,26 @@ Classify the image:
 
 Then decide how much should be rebuilt in code versus preserved as image assets.
 
+Also classify the canvas model before coding:
+
+- Full-bleed responsive page
+- Centered fixed/max-width editorial canvas
+- Hybrid full-bleed background with constrained content
+- Poster-like fixed composition with responsive recomposition
+
+Do not assume the layout should stretch to fill very wide browsers. If the screenshot uses a designed canvas, implement a centered site shell with a max width and an outer browser background.
+
+### Step 1A — Identify Typography System
+
+Map typography before implementation:
+
+- Hero/display type: serif, high-contrast serif, condensed sans, tall compressed sans, grotesk, mono, or custom lettering
+- Navigation/caption type
+- Body copy type
+- Metadata/tag type
+
+Use close web-safe or open-source font stacks. Do not use arbitrary default serif/sans fonts for hero typography when a closer display category is visible. If commercial fonts are unavailable, choose a close fallback and document the tradeoff.
+
 ### Step 2 — Identify Main Sections
 
 Break the page into sections, such as:
@@ -249,6 +269,18 @@ For each asset, provide:
 - Whether it is decorative or semantic
 - Suggested extraction method
 
+Choose an extraction strategy for each asset:
+
+- Rect crop: rectangular photos, cards, and banners
+- Masked crop: irregular edges over simple backgrounds
+- Subject cutout: products, people, devices, stickers, paper scraps, and floating objects
+- Inpaint cleanup: remove baked-in UI text, grid lines, or neighboring sections that should be HTML/CSS
+- Upscale enhance: small, blurry, or compressed crops that render larger in the webpage
+- Vector/CSS recreate: simple icons, arrows, grid lines, dots, dividers, and geometric marks
+- Regenerate/replace: non-essential visuals that cannot be cleanly extracted and are not specific real content
+
+Core UI text, navigation, titles, metadata, filters, and contact details should not remain baked into media assets. Packaging labels, phone screens, environmental signs, and product marks may stay inside media when they are part of the photographed object or scene.
+
 ### Step 5 — Detect Layout System
 
 Describe:
@@ -299,20 +331,41 @@ Output separate recommendations for:
 
 ---
 
+## Required QA Passes
+
+Use these passes when implementing, not only when analyzing:
+
+1. Asset QA pass
+   - Generate or inspect a contact sheet for extracted assets.
+   - Re-crop, mask, inpaint, or recreate assets that contain unwanted baked-in UI text.
+   - Ensure background textures do not contain semantic text or strong foreground shapes.
+   - Check whether each asset is large enough for its rendered size; upscale and sharpen when needed.
+2. Visual rhythm pass
+   - Check hero title line count, CTA visibility, main media proportion, section heights, and card rhythm against the source image.
+   - Preserve the source's canvas behavior: centered max-width canvas vs full-bleed layout.
+3. Browser QA pass
+   - Test at 1440px, 1024px, 768px, and 390px.
+   - Check no horizontal overflow, no blocked text, all images loaded, and no console errors.
+   - Verify every interactive filter/tab/expanded state with an actual browser action when possible.
+
+---
+
 ## Output Format
 
 When this skill is used, always produce the following sections:
 
 1. Page structure
 2. Layer map
-3. Asset extraction list
-4. Core HTML content list
-5. Suggested DOM structure
-6. CSS layering strategy
-7. Interaction state plan
-8. Responsive recomposition plan
-9. Implementation instructions
-10. QA checklist
+3. Canvas model
+4. Typography map
+5. Asset extraction list
+6. Core HTML content list
+7. Suggested DOM structure
+8. CSS layering strategy
+9. Interaction state plan
+10. Responsive recomposition plan
+11. Implementation instructions
+12. QA checklist
 
 ---
 
@@ -328,6 +381,12 @@ When this skill is used, always produce the following sections:
 8. Decorative assets should use `alt=""` and `aria-hidden="true"`.
 9. Always define a z-index system before implementing absolute-positioned collage elements.
 10. The final webpage should preserve the visual language, not necessarily every pixel.
+11. Do not stretch a designed fixed-width canvas across unlimited browser width; use a centered max-width shell when the source indicates one.
+12. Match typography categories deliberately, especially hero/display type. Document fallback fonts when exact fonts are unavailable.
+13. Do not keep unwanted source UI text inside media crops. Re-crop, mask, inpaint, or rebuild that content as HTML/CSS.
+14. Use cutouts with alpha for non-rectangular products, devices, stickers, paper, and floating objects when rectangular crops would look wrong.
+15. Enhance low-resolution extracted assets before use when their rendered size exceeds the crop's useful resolution.
+16. Avoid negative letter spacing unless the source clearly depends on it and the text remains readable; prefer 0 letter spacing for maintainable web output.
 
 ---
 

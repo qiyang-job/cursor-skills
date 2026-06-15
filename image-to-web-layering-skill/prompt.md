@@ -13,19 +13,23 @@ Convert this image into a maintainable responsive webpage.
 Before writing code, first output:
 1. Page structure
 2. Layer map
-3. Asset extraction list
-4. Core HTML content list
-5. DOM plan
-6. CSS layering strategy
-7. Interaction state plan
-8. Responsive recomposition plan
-9. QA checklist
+3. Canvas model
+4. Typography map
+5. Asset extraction list
+6. Core HTML content list
+7. DOM plan
+8. CSS layering strategy
+9. Interaction state plan
+10. Responsive recomposition plan
+11. QA checklist
 
 Principle:
 Complex visuals become image assets.
 Core information becomes real HTML.
 Interaction states become structured UI states.
 Responsive layouts are recomposed, not blindly scaled.
+Do not assume the page should stretch full-width; detect whether it uses a centered max-width canvas.
+Match hero/display typography by source font category.
 ```
 
 ## Asset Extraction Prompt
@@ -39,11 +43,13 @@ For each asset, include:
 - filename
 - source element
 - priority A/B/C/D
-- extraction method
+- extraction type: rect crop, masked crop, subject cutout, cleanup/inpaint, upscale, vector/CSS recreate, or regenerate
 - suggested tool
+- output format
 - required on mobile or optional
 - whether it is decorative or semantic
-- notes for transparent background, mask, or crop
+- notes for transparent background, mask, cleanup, upscale, or crop
+- whether the asset contains unwanted UI text that should be removed or rebuilt as HTML
 ```
 
 ## Implementation Prompt
@@ -59,6 +65,9 @@ Requirements:
 - Use CSS for grid, layout, spacing, section lines, and responsive behavior.
 - Use JavaScript only for filtering, expandable details, scroll states, or light parallax.
 - Preserve the visual language, but do not flatten the webpage into one image.
+- Respect the detected canvas model, including centered max-width shells when present.
+- Use source-appropriate display, navigation, body, and metadata font stacks.
+- Use cutouts, masks, cleanup/inpaint, or upscale when rectangular crops are insufficient.
 - Desktop can preserve visual complexity; mobile must preserve information order and usability.
 - Hide or simplify decorative assets on mobile when they block reading or create overflow.
 - Provide a short implementation note explaining any intentional deviations from the source image.
@@ -78,10 +87,12 @@ Check:
 4. Responsive usability
 5. Maintainability
 6. Interaction clarity
+7. Asset extraction quality
 
 Return:
 - score table
 - concrete issues
 - priority fixes
 - exact files/selectors to adjust
+- browser check results for 1440, 1024, 768, and 390 widths when available
 ```

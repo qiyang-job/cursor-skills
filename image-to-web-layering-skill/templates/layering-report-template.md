@@ -19,12 +19,30 @@
 | L4 Decoration |  |  |
 | L5 Interaction |  |  |
 
-## 3. Asset Extraction List
+## 3. Canvas Model
 
-| File Name | Element | Layer | Format | Priority | Required on Mobile | Usage |
-|---|---|---|---|---|---|---|
+- Source image width:
+- Intended max page width:
+- Canvas behavior:
+- Outer browser background:
+- Should content stretch beyond source width:
+- Site shell recommendation:
 
-## 4. Core HTML Content
+## 4. Typography Map
+
+| Role | Source Style | Suggested Fonts | CSS Treatment | Notes |
+|---|---|---|---|---|
+| Hero / Display |  |  |  |  |
+| Navigation |  |  |  |  |
+| Body |  |  |  |  |
+| Metadata / Tags |  |  |  |  |
+
+## 5. Asset Extraction List
+
+| File Name | Element | Layer | Extraction Type | Format | Priority | Required on Mobile | Usage / QA Notes |
+|---|---|---|---|---|---|---|---|
+
+## 6. Core HTML Content
 
 ### Navigation
 
@@ -38,13 +56,13 @@
 
 ### Contact
 
-## 5. DOM Plan
+## 7. DOM Plan
 
 ```html
 <!-- semantic structure here -->
 ```
 
-## 6. CSS Layering Plan
+## 8. CSS Layering Plan
 
 ```css
 :root {
@@ -59,12 +77,12 @@
 }
 ```
 
-## 7. Interaction Plan
+## 9. Interaction Plan
 
 | Element | Default | Hover | Active / Expanded | Mobile |
 |---|---|---|---|---|
 
-## 8. Responsive Plan
+## 10. Responsive Plan
 
 ### Desktop
 
@@ -72,9 +90,9 @@
 
 ### Mobile
 
-## 9. Development Instructions
+## 11. Development Instructions
 
-## 10. QA Checklist
+## 12. QA Checklist
 
 - [ ] Core text is real HTML
 - [ ] Decorative assets are not clickable
@@ -84,3 +102,10 @@
 - [ ] Images are optimized
 - [ ] Decorative images use empty alt
 - [ ] Reduced motion is supported
+- [ ] Canvas model is respected
+- [ ] Typography matches source categories
+- [ ] Contact sheet or asset review completed
+- [ ] Media crops do not contain unwanted UI text
+- [ ] Non-rectangular assets use cutout/mask when needed
+- [ ] Low-resolution assets are enhanced before use
+- [ ] Browser checks passed at 1440, 1024, 768, and 390 widths
